@@ -1,24 +1,16 @@
 var express = require("express");
 var router = express.Router();
-var mongoose = require("mongoose");
-var Book = require("../models/blog.js");
+// var mongoose = require("mongoose");
+var Blog = require("../../models/blog.js");
 var passport = require("passport");
-require("../config/passport")(passport);
+require("../../controllers/user")(passport);
 
-/* GET ALL BOOKS */
-router.get("/", passport.authenticate("jwt", { session: false }), function(
-  req,
-  res
-) {
-  var token = getToken(req.headers);
-  if (token) {
-    Book.find(function(err, books) {
-      if (err) return next(err);
-      res.json(books);
-    });
-  } else {
-    return res.status(403).send({ success: false, msg: "Unauthorized." });
-  }
+/* GET ALL BLOGS */
+router.get("/", function(req, res) {
+  Blog.find(function(err, Blogs) {
+    if (err) return next(err);
+    res.json(Blogs);
+  });
 });
 
 let getToken = function(headers) {
@@ -34,22 +26,22 @@ let getToken = function(headers) {
   }
 };
 
-/* GET SINGLE BOOK BY ID */
+/* GET SINGLE Blog BY ID */
 router.get("/:id", function(req, res, next) {
-  Book.findById(req.params.id, function(err, post) {
+  Blog.findById(req.params.id, function(err, post) {
     if (err) return next(err);
     res.json(post);
   });
 });
 
-/* SAVE BOOK */
+/* SAVE Blog */
 router.post("/", passport.authenticate("jwt", { session: false }), function(
   req,
   res
 ) {
   var token = getToken(req.headers);
   if (token) {
-    Book.create(req.body, function(err, post) {
+    Blog.create(req.body, function(err, post) {
       if (err) return next(err);
       res.json(post);
     });
@@ -58,20 +50,38 @@ router.post("/", passport.authenticate("jwt", { session: false }), function(
   }
 });
 
-/* UPDATE BOOK */
-router.put("/:id", function(req, res, next) {
-  Book.findByIdAndUpdate(req.params.id, req.body, function(err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
+/* UPDATE Blog */
+router.put("/:id", passport.authenticate("jwt", { session: false }), function(
+  req,
+  res,
+  next
+) {
+  var token = getToken(req.headers);
+  if (token) {
+    Blog.findByIdAndUpdate(req.params.id, req.body, function(err, post) {
+      if (err) return next(err);
+      res.json(post);
+    });
+  } else {
+    return res.status(403).send({ success: false, msg: "Unauthorized." });
+  }
 });
 
-/* DELETE BOOK */
-router.delete("/:id", function(req, res, next) {
-  Book.findByIdAndRemove(req.params.id, req.body, function(err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
-});
+/* DELETE Blog */
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res, next) {
+    var token = getToken(req.headers);
+    if (token) {
+      Blog.findByIdAndRemove(req.params.id, req.body, function(err, post) {
+        if (err) return next(err);
+        res.json(post);
+      });
+    } else {
+      return res.status(403).send({ success: false, msg: "Unauthorized." });
+    }
+  }
+);
 
 module.exports = router;
