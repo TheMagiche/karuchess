@@ -23,6 +23,10 @@ const UserSchema = new Schema({
   created: {
     type: Date,
     required: [true, "Created date is required"]
+  },
+  roles: {
+    type: String,
+    default: "User"
   }
 });
 

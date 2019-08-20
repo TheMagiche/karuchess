@@ -1,6 +1,6 @@
 // var mongoose = require("mongoose");
 var passport = require("passport");
-var settings = require("./user_settings");
+// var settings = require("./user_settings");
 require("./user")(passport);
 var express = require("express");
 var jwt = require("jsonwebtoken");
@@ -48,9 +48,13 @@ router.post("/login", function(req, res) {
         user.comparePassword(req.body.password, function(err, isMatch) {
           if (isMatch && !err) {
             // if user is found and password is right create a token
-            var token = jwt.sign(user.toJSON(), settings.secret);
+            var token = jwt.sign(user.toJSON(), process.env.JWT_KEY);
             // return the information including token as JSON
-            res.json({ success: true, token: "JWT " + token });
+            res.json({
+              success: true,
+              token: "JWT " + token,
+              lichessId: user.lichess_id
+            });
           } else {
             res.status(401).send({
               success: false,

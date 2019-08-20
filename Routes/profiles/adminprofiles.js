@@ -1,11 +1,12 @@
 const express = require("express");
-const auth = require("../middleware/auth").auth;
+const authRole = require("../../middleware/auth").authenticateRole;
 const router = express.Router();
-router.get("/", auth, async (req, res) => {
+router.get("/", authRole, async (req, res) => {
   // View logged in user profile
+
   res.send(req.user);
 });
-router.post("/logout", auth, async (req, res) => {
+router.post("/logout", authRole, async (req, res) => {
   // Log user out of the application
   try {
     req.user.tokens = req.user.tokens.filter(token => {
@@ -18,7 +19,7 @@ router.post("/logout", auth, async (req, res) => {
   }
 });
 
-router.post("/logoutall", auth, async (req, res) => {
+router.post("/logoutall", authRole, async (req, res) => {
   // Log user out of all devices
   try {
     req.user.tokens.splice(0, req.user.tokens.length);

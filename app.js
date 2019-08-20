@@ -40,7 +40,9 @@ if (process.env.NODE_ENV === "production") {
 const messageRouter = require("./Routes/message");
 app.use("/message", messageRouter);
 app.use("/api/auth", require("./controllers/user_sign"));
-
+app.use("/api/blog", require("./Routes/blog/blog"));
+app.use("/api/admin", require("./Routes/profiles/adminprofiles"));
+app.use("/api/member", require("./Routes/profiles/userprofiles"));
 /**
  * Connect Mongo Database
  */
