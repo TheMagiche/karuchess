@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/users");
 
 const authorize = function(roles = []) {
   // roles param can be a single role string (e.g. Role.User or 'User')

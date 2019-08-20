@@ -1,5 +1,5 @@
 const express = require("express");
-const auth = require("../middleware/auth").auth;
+const auth = require("../../middleware/auth").auth;
 const router = express.Router();
 router.get("/", auth, async (req, res) => {
   // View logged in user profile
