@@ -26,8 +26,17 @@ router.post("/register", async (req, res) => {
     console.log("saved");
     if (user.username !== req.body.username) {
       return res.json({ success: false, msg: "Username already exists." });
+    } else {
+      var karuUser = await user.getUserDetails();
+      return res.json({
+        success: true,
+        msg: "Successful created new user.",
+        username: karuUser.username,
+        email: karuUser.email,
+        lichess_id: karuUser.lichess_id,
+        role: karuUser.role
+      });
     }
-    return res.json({ success: true, msg: "Successful created new user." });
   }
 });
 router.post("/login", function(req, res) {
@@ -45,15 +54,19 @@ router.post("/login", function(req, res) {
         });
       } else {
         // check if password matches
-        user.comparePassword(req.body.password, function(err, isMatch) {
+        user.comparePassword(req.body.password, async function(err, isMatch) {
           if (isMatch && !err) {
             // if user is found and password is right create a token
             var token = jwt.sign(user.toJSON(), process.env.JWT_KEY);
             // return the information including token as JSON
+            var karuUser = await user.getUserDetails();
             res.json({
               success: true,
               token: "JWT " + token,
-              lichessId: user.lichess_id
+              username: karuUser.username,
+              email: karuUser.email,
+              lichess_id: karuUser.lichess_id,
+              role: karuUser.role
             });
           } else {
             res.status(401).send({
