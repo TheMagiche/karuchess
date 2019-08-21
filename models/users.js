@@ -59,5 +59,14 @@ UserSchema.methods.comparePassword = function(passw, cb) {
     cb(null, isMatch);
   });
 };
+UserSchema.methods.getUserDetails = function() {
+  let user = {
+    username: this.username,
+    email: this.email,
+    lichess_id: this.lichess_id,
+    role: this.roles
+  };
+  return user;
+};
 
 module.exports = mongoose.model("user", UserSchema);
