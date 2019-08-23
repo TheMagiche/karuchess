@@ -17,6 +17,10 @@ router.post("/register", async (req, res) => {
   } else {
     console.log("Saving details ..");
     const user = await new User({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      regNo: req.body.regNo,
+      age: req.body.age,
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
@@ -66,7 +70,12 @@ router.post("/login", function(req, res) {
               username: karuUser.username,
               email: karuUser.email,
               lichess_id: karuUser.lichess_id,
-              role: karuUser.role
+              role: karuUser.role,
+              _id: karuUser._id,
+              firstname: karuUser.username,
+              lastname: karuUser.lastname,
+              age: karuUser.age,
+              regNo: karuUser.regNo
             });
           } else {
             res.status(401).send({

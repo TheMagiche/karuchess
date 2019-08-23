@@ -3,6 +3,27 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt-nodejs");
 
 const UserSchema = new Schema({
+  firstname: {
+    type: String,
+    unique: false,
+    required: true
+  },
+  lastname: {
+    type: String,
+    unique: false,
+    required: true
+  },
+  regNo: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  age: {
+    type: Number,
+    unique: false,
+    default: 21,
+    required: true
+  },
   username: {
     type: String,
     unique: true,
@@ -61,6 +82,11 @@ UserSchema.methods.comparePassword = function(passw, cb) {
 };
 UserSchema.methods.getUserDetails = function() {
   let user = {
+    _id: this._id,
+    firstname: this.username,
+    lastname: this.lastname,
+    age: this.age,
+    regNo: this.regNo,
     username: this.username,
     email: this.email,
     lichess_id: this.lichess_id,
