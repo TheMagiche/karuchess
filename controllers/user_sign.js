@@ -38,7 +38,12 @@ router.post("/register", async (req, res) => {
         username: karuUser.username,
         email: karuUser.email,
         lichess_id: karuUser.lichess_id,
-        role: karuUser.role
+        role: karuUser.role,
+        _id: karuUser._id,
+        firstname: karuUser.username,
+        lastname: karuUser.lastname,
+        age: karuUser.age,
+        regNo: karuUser.regNo
       });
     }
   }
